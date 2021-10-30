@@ -1,0 +1,16 @@
+{
+  "name": "node-shell",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.14",
+    "request": "^2.88.2"
+  }
+}
