@@ -12,6 +12,12 @@ p {
   margin: 2px;
 }
 
+img {
+  object-fit: cover;
+  width: 40rem;
+  height: 40rem;
+}
+
 .hero {
   background-image: url("petscover.jpg");
   height: 200px;
@@ -114,6 +120,18 @@ h1 {
 
 .pet-page #back {
   text-align: center;
+}
+
+#errorPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#errorPage h1 {
+  color: black;
+  font-size: 2rem;
 }
 
 @media (max-width: 650px) {

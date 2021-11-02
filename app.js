@@ -15,6 +15,9 @@ app.get("/", (req, res) => {
 
 app.get("/pet/:id", (req, res) => {
   const pet = petsData.find(req.params.id);
+  if (!pet.id) {
+    res.status(404).send(require("./views/404page")());
+  }
   res.send(require("./views/detailspage")(pet));
 });
 
