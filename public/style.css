@@ -1,0 +1,126 @@
+body {
+  font-family: sans-serif;
+  background: rgb(224, 222, 222);
+}
+
+#homepage a {
+  color: #000000;
+  text-decoration: none;
+}
+
+p {
+  margin: 2px;
+}
+
+.hero {
+  background-image: url("petscover.jpg");
+  height: 200px;
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.pet-page .hero {
+  height: 100px;
+  justify-content: flex-start;
+}
+
+h1 {
+  position: relative;
+  color: #ffffff;
+  font-size: 4rem;
+  line-height: 0.9;
+  text-align: center;
+}
+
+.pet-page h1 {
+  font-size: 3rem;
+  padding: 2rem;
+}
+
+.pets-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.pet-item {
+  display: flex;
+  padding: 3rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pet-item img {
+  object-fit: cover;
+  width: 12rem;
+  height: 12rem;
+  border: solid white;
+  border-width: 2px;
+  border-radius: 50%;
+}
+
+.pet-item p {
+  font-weight: bold;
+}
+
+.pet-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  justify-content: space-around;
+}
+
+.pet-details img {
+  object-fit: cover;
+  width: auto;
+  height: 20rem;
+  border: solid white;
+  border-width: 4px;
+  box-shadow: 10px 5px 5px lightgray;
+}
+
+.pet-details .pet-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.pet-info p {
+  padding: 2px;
+}
+
+.pet-info span {
+  font-weight: bold;
+}
+
+.pet-page #back {
+  text-align: center;
+}
+
+@media (max-width: 650px) {
+  h1 {
+    font-size: 3rem;
+  }
+  .pet-page h1 {
+    font-size: 2rem;
+  }
+}

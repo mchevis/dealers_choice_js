@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
+    "html-template-tag": "^4.0.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14",
     "request": "^2.88.2"
