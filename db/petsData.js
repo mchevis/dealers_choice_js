@@ -29,7 +29,7 @@ const pets = [
     ownerName: "Ilane C",
     dob: "10-14-1998",
     type: "cat",
-    breed: "Unknown",
+    breed: "American Short Hair",
   },
   {
     id: 5,
@@ -62,6 +62,22 @@ const pets = [
     dob: "12-14-2017",
     type: "hedgehog",
     breed: "Unknown",
+  },
+  {
+    id: 9,
+    name: "Batya",
+    ownerName: "Ilane C",
+    dob: "10-14-2016",
+    type: "cat",
+    breed: "Unknown",
+  },
+  {
+    id: 10,
+    name: "Gilligan",
+    ownerName: "Ilane C",
+    dob: "09-14-2019",
+    type: "dog",
+    breed: "Maltipoo",
   },
 ];
 

@@ -6,7 +6,6 @@ const petsData = require("./db/petsData");
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/pet", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   const pets = petsData.list();

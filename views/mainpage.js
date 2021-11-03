@@ -17,7 +17,7 @@ module.exports = (petsData) =>
             ${petsData.map(
               (pet) => `
             <div class='pet-item'>
-            <a href='/pet/${pet.id}'><img src="${pet.name}.jpg" />
+            <a href='/pet/${pet.id}'><img src="/${pet.name}.jpg" />
               <p>
                 ${pet.name} (${pet.breed})</a>
               </p>

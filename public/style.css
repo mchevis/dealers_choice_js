@@ -1,6 +1,7 @@
 body {
   font-family: sans-serif;
   background: rgb(224, 222, 222);
+  margin: 0px;
 }
 
 #homepage a {
@@ -28,6 +29,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
 }
 
 .hero::before {
