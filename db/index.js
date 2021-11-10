@@ -45,7 +45,12 @@ const syncAndSeed = async () => {
     INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Little Bear', 1, '1990-04-03', 1, 6);
     INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Remy', 1, '1990-04-03', 1, 4);
     INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Batya', 3, '1990-04-03', 2, 3);
-    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Rosy', 1, '2000-04-03', 3, null);
+    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Rosy', null, '2000-04-03', 3, null);
+    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Gilligan', 3, '2019-04-03', 1, 5);
+    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Praya', 2, '2000-04-03', 1, 2);
+    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Banze', 2, '2014-04-03', 1, 1);
+    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Pisco', 2, '2017-04-03', 1, 1);
+    INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Poseidon', 3, '2015-04-03', 2, 3);
     `;
   await client.query(SQL);
 };
