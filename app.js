@@ -1,27 +1,36 @@
+const { client, syncAndSeed } = require("./db");
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
+
 const app = express();
-const petsData = require("./db/petsData");
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: false }));
+
+app.use("/pets", require("./routes/pets"));
 
 app.get("/", (req, res) => {
-  const pets = petsData.list();
-  res.send(require("./views/mainpage")(pets));
+  res.redirect("/pets");
 });
 
-app.get("/pet/:id", (req, res) => {
-  const pet = petsData.find(req.params.id);
-  if (!pet.id) {
-    res.status(404).send(require("./views/404page")());
-  }
-  res.send(require("./views/detailspage")(pet));
+app.use((req, res) => {
+  res.status(404).send(require("./views/404page")());
 });
 
 const PORT = 1337;
 
-app.listen(PORT, () => {
-  console.log(`App listening in port ${PORT}`);
-});
+const setUp = async () => {
+  try {
+    await client.connect();
+    await syncAndSeed();
+    app.listen(PORT, () => {
+      console.log(`App listening in port ${PORT}`);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+setUp();

@@ -19,7 +19,7 @@ module.exports = (pet) =>
             <div class="pet-info">
               <p> <span class="key"> ID: </span> ${pet.id} </p> 
               <p> <span class="key"> DOB: </span> ${pet.dob} </p>
-              <p> <span class="key"> Owner: </span> ${pet.ownerName} </p>
+              <p> <span class="key"> Owner: </span> ${pet.owner_firstname} ${pet.owner_lastinitial} </p>
               <p> <span class="key"> Breed: </span> ${pet.breed} </p>
 </div>
             </p>
