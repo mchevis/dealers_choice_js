@@ -15,10 +15,6 @@ app.get("/", (req, res) => {
   res.redirect("/pets");
 });
 
-app.use((req, res) => {
-  res.status(404).send(require("./views/404page")());
-});
-
 const PORT = 1337;
 
 const setUp = async () => {

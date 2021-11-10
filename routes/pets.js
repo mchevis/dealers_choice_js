@@ -47,7 +47,12 @@ router.get("/:id", async (req, res, next) => {
       [req.params.id]
     );
     const pet = response.rows[0];
-    res.send(require("../views/detailspage")(pet));
+    if (pet === undefined) {
+      const error = new Error("Not a valid id");
+      throw error;
+    } else {
+      res.send(require("../views/detailspage")(pet));
+    }
   } catch (error) {
     next(error);
   }
