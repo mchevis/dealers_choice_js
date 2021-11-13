@@ -1,4 +1,4 @@
-const { client, syncAndSeed } = require("./db");
+const { conn, syncAndSeed } = require("./db");
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
@@ -15,14 +15,13 @@ app.get("/", (req, res) => {
   res.redirect("/pets");
 });
 
-const PORT = 1337;
-
 const setUp = async () => {
   try {
-    await client.connect();
+    await conn.authenticate();
     await syncAndSeed();
-    app.listen(PORT, () => {
-      console.log(`App listening in port ${PORT}`);
+    const port = process.env.PORT || 1337;
+    app.listen(port, () => {
+      console.log(`App listening in port ${port}`);
     });
   } catch (err) {
     console.log(err);
