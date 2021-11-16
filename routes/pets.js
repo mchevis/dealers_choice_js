@@ -6,14 +6,37 @@ const {
 
 router.get("/", async (req, res, next) => {
   try {
-    const pets = await Pet.findAll({
-      include: [
-        { model: Breed, as: "breed" },
-        { model: Owner, as: "owner" },
-      ],
-      order: ["name"],
+    const [pets, owners, breeds] = await Promise.all([
+      Pet.findAll({
+        include: [
+          { model: Breed, as: "breed" },
+          { model: Owner, as: "owner" },
+        ],
+        order: ["name"],
+      }),
+      Owner.findAll({
+        order: ["firstName"],
+      }),
+      Breed.findAll({
+        order: ["type", "name"],
+      }),
+    ]);
+    res.send(require("../views/mainpage")(pets, owners, breeds));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  try {
+    Pet.create({
+      name: req.body.petName,
+      dob: req.body.dob,
+      ownerId: req.body.ownerId,
+      breedId: req.body.breedId,
+      picture: req.body.petPic,
     });
-    res.send(require("../views/mainpage")(pets));
+    res.redirect(`/`);
   } catch (err) {
     next(err);
   }

@@ -14,7 +14,7 @@ module.exports = (pet) =>
             <h1>Marina's Pets Directory</h1>
           </div>
           <div class="pet-details">
-            <img src="/${pet.name}.jpg" />
+            <img src="${pet.picture}" />
             <h2>${pet.name}</h2>
             <div class="pet-info">
               <p> <span class="key"> ID: </span> ${pet.id} </p> 

@@ -43,6 +43,11 @@ const Pet = conn.define("tblPet", {
   dob: {
     type: DATEONLY,
   },
+  picture: {
+    type: STRING(),
+    //normally i'd have validated it but my current seeding method doesn't allow it and I dont wanna upload all these pics to imgur
+    // validate: { isUrl: true },
+  },
 });
 
 Pet.belongsTo(Breed, { as: "breed" });
@@ -85,54 +90,63 @@ const syncAndSeed = async () => {
         dob: new Date(2010, 4, 3),
         breedId: rescue.id,
         ownerId: kylie.id,
+        picture: "/littlebear.jpg",
       }),
       Pet.create({
         name: "Remy",
         dob: new Date(2008, 1, 5),
         breedId: cockapoo.id,
         ownerId: kylie.id,
+        picture: "/remy.jpg",
       }),
       Pet.create({
         name: "Batya",
         dob: new Date(2008, 1, 5),
         breedId: ash.id,
         ownerId: ilane.id,
+        picture: "/batya.jpg",
       }),
       Pet.create({
         name: "Rosie",
         dob: new Date(2008, 1, 5),
         breedId: ehedge.id,
         ownerId: kylie.id,
+        picture: "/rosie.jpg",
       }),
       Pet.create({
         name: "Gilligan",
         dob: new Date(2008, 1, 5),
         breedId: maltipoo.id,
         ownerId: ilane.id,
+        picture: "/gilligan.jpg",
       }),
       Pet.create({
         name: "Praya",
         dob: new Date(2008, 1, 5),
         breedId: chinese.id,
         ownerId: simone.id,
+        picture: "/praya.jpg",
       }),
       Pet.create({
         name: "Banze",
         dob: new Date(2008, 1, 5),
         breedId: chinese.id,
         ownerId: simone.id,
+        picture: "/banze.jpg",
       }),
       Pet.create({
         name: "Pisco",
         dob: new Date(2008, 1, 5),
         breedId: chinese.id,
         ownerId: simone.id,
+        picture: "/pisco.jpg",
       }),
       Pet.create({
         name: "Poseidon",
         dob: new Date(2008, 1, 5),
         breedId: ash.id,
         ownerId: ilane.id,
+        picture: "/poseidon.jpg",
       }),
     ]);
   } catch (err) {

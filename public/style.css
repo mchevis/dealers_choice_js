@@ -140,6 +140,53 @@ h1 {
   font-size: 2rem;
 }
 
+#addPet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem;
+  padding: 2rem 3rem 2rem 2rem;
+  background-color: gray;
+  border-radius: 20px;
+}
+
+#addPet #formFields {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#addPet .addPetField {
+  padding: 10px;
+  width: -webkit-fill-available;
+  margin: 5px;
+}
+
+#addPet p {
+  text-align: center;
+  margin: 0 1rem 1rem 1rem;
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+#addPet button {
+  margin: 1rem;
+  padding: 1rem;
+  width: 200px;
+  border-radius: 2em;
+  color: #ffffff;
+  background-color: #4eb5f1;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+#addPet button:hover {
+  color: white;
+  background-color: #4095c6;
+}
+
 @media (max-width: 650px) {
   h1 {
     font-size: 3rem;
