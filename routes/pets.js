@@ -20,18 +20,30 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const pet = await Pet.findOne({
-      where: { id: req.params.id },
-      include: [
-        { model: Breed, as: "breed" },
-        { model: Owner, as: "owner" },
-      ],
-    });
-    if (pet === undefined) {
-      const error = new Error("Not a valid id");
-      throw error;
+    function checkIfValidUUID(str) {
+      // Regular expression to check if string is a valid UUID
+      const regexExp =
+        /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+      return regexExp.test(str);
+    }
+    let pet;
+    if (checkIfValidUUID(req.params.id)) {
+      pet = await Pet.findOne(
+        {
+          where: { id: req.params.id },
+          include: [
+            { model: Breed, as: "breed" },
+            { model: Owner, as: "owner" },
+          ],
+        } || null
+      );
     } else {
+      pet = undefined;
+    }
+    if (pet) {
       res.send(require("../views/detailspage")(pet));
+    } else {
+      res.redirect("/error");
     }
   } catch (error) {
     next(error);

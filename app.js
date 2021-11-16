@@ -16,6 +16,10 @@ app.get("/", (req, res) => {
   res.redirect("/pets");
 });
 
+app.use(function (req, res) {
+  res.status(404).sendFile(path.join(__dirname, "./views/404page.html"));
+});
+
 const setUp = async () => {
   try {
     await conn.authenticate();
