@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const { STRING, UUID, UUIDV4, DATEONLY } = Sequelize;
+const { STRING, UUID, UUIDV4, DATEONLY, ENUM } = Sequelize;
 const conn = new Sequelize(
   process.env.DATABASE_URL || "postgres://localhost/dealers_choice_pets"
 );
@@ -20,22 +20,15 @@ const Owner = conn.define("tblOwner", {
   },
 });
 
-const Type = conn.define("tblType", {
-  name: {
-    type: STRING(20),
-    allowNull: false,
-  },
-});
-
 const Breed = conn.define("tblBreed", {
   name: {
     type: STRING(20),
     allowNull: false,
   },
+  type: {
+    type: ENUM("dog", "cat", "hedgehog"),
+  },
 });
-
-Breed.belongsTo(Type);
-Type.hasMany(Breed);
 
 const Pet = conn.define("tblPet", {
   id: {
@@ -52,22 +45,10 @@ const Pet = conn.define("tblPet", {
   },
 });
 
-Pet.belongsTo(Breed);
-Pet.belongsTo(Owner);
+Pet.belongsTo(Breed, { as: "breed" });
+Pet.belongsTo(Owner, { as: "owner" });
 
 const syncAndSeed = async () => {
-  // const SQL = `
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Little Bear', 1, '1990-04-03', 1, 6);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Remy', 1, '1990-04-03', 1, 4);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Batya', 3, '1990-04-03', 2, 3);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Rosy', null, '2000-04-03', 3, null);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Gilligan', 3, '2019-04-03', 1, 5);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Praya', 2, '2000-04-03', 1, 2);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Banze', 2, '2014-04-03', 1, 1);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Pisco', 2, '2017-04-03', 1, 1);
-  //   INSERT INTO tblPets(name, owner_id, dob, type_id, breed_id) VALUES('Poseidon', 3, '2015-04-03', 2, 3);
-  //   `;
-  // await client.query(SQL);
   try {
     await conn.sync({ force: true });
     console.log(`Tables have been dropped;`);
@@ -76,9 +57,6 @@ const syncAndSeed = async () => {
       kylie,
       simone,
       ilane,
-      dog,
-      cat,
-      hedgehog,
       chinese,
       pyranese,
       ash,
@@ -91,25 +69,14 @@ const syncAndSeed = async () => {
       Owner.create({ firstName: "Kylie", lastInitial: "B" }),
       Owner.create({ firstName: "Simone", lastInitial: "F" }),
       Owner.create({ firstName: "Ilane", lastInitial: "C" }),
-      Type.create({ name: "dog" }),
-      Type.create({ name: "cat" }),
-      Type.create({ name: "hedgehog" }),
-      Breed.create({ name: "Chinese Crested" }),
-      Breed.create({ name: "Pyranese" }),
-      Breed.create({ name: "American Short Hair" }),
-      Breed.create({ name: "Cockapoo" }),
-      Breed.create({ name: "Maltipoo" }),
-      Breed.create({ name: "Rescue Mix" }),
-      Breed.create({ name: "Shitzu" }),
-      Breed.create({ name: "European Hedgehog" }),
-    ]);
-    //update breeds to have a type now that types have been created
-    await Promise.all([
-      [chinese, pyranese, cockapoo, maltipoo, rescue, shitzu].map((breed) =>
-        breed.update({ typeId: dog.id })
-      ),
-      [ash].map((breed) => breed.update({ typeId: cat.id })),
-      [ehedge].map((breed) => breed.update({ typeId: hedgehog.id })),
+      Breed.create({ name: "Chinese Crested", type: "dog" }),
+      Breed.create({ name: "Pyranese", type: "dog" }),
+      Breed.create({ name: "American Short Hair", type: "cat" }),
+      Breed.create({ name: "Cockapoo", type: "dog" }),
+      Breed.create({ name: "Maltipoo", type: "dog" }),
+      Breed.create({ name: "Rescue Mix", type: "dog" }),
+      Breed.create({ name: "Shitzu", type: "dog" }),
+      Breed.create({ name: "European Hedgehog", type: "hedgehog" }),
     ]);
     //create pets now that all the dependencies are taken care of
     await Promise.all([
@@ -173,4 +140,4 @@ const syncAndSeed = async () => {
   }
 };
 
-module.exports = { conn, syncAndSeed, models: { Owner, Type, Breed, Pet } };
+module.exports = { conn, syncAndSeed, models: { Owner, Breed, Pet } };

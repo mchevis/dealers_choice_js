@@ -19,7 +19,7 @@ module.exports = (petsData) =>
             <div class='pet-item'>
             <a href='/pets/${pet.id}'><img src="/${pet.name}.jpg" />
               <p>
-                ${pet.name} (${pet.breed})</a>
+                ${pet.name} (${pet.breed.name})</a>
               </p>
             </div>`
             )}

@@ -5,7 +5,7 @@ module.exports = (pet) =>
     <!DOCTYPE html>
     <html>
       <head>
-        <title>${pet.name} (${pet.breed}) - Marina's Pets</title>
+        <title>${pet.name} (${pet.breed.name}) - Marina's Pets</title>
         <link rel="stylesheet" href="/style.css" />
       </head>
       <body>
@@ -19,8 +19,8 @@ module.exports = (pet) =>
             <div class="pet-info">
               <p> <span class="key"> ID: </span> ${pet.id} </p> 
               <p> <span class="key"> DOB: </span> ${pet.dob} </p>
-              <p> <span class="key"> Owner: </span> ${pet.owner_firstname} ${pet.owner_lastinitial} </p>
-              <p> <span class="key"> Breed: </span> ${pet.breed} </p>
+              <p> <span class="key"> Owner: </span> ${pet.owner.firstName} ${pet.owner.lastInitial} </p>
+              <p> <span class="key"> Breed: </span> ${pet.breed.name} </p>
 </div>
             </p>
           </div>

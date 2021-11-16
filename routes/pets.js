@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const {
-  models: { Owner, Type, Breed, Pet },
+  models: { Owner, Breed, Pet },
 } = require("../db");
 
 router.get("/", async (req, res, next) => {
   try {
-    const pets = await Pet.findAll();
+    const pets = await Pet.findAll({
+      include: [
+        { model: Breed, as: "breed" },
+        { model: Owner, as: "owner" },
+      ],
+    });
     res.send(require("../views/mainpage")(pets));
   } catch (err) {
     next(err);
@@ -15,7 +20,13 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const pet = Pet.findByPk(req.params.id);
+    const pet = await Pet.findOne({
+      where: { id: req.params.id },
+      include: [
+        { model: Breed, as: "breed" },
+        { model: Owner, as: "owner" },
+      ],
+    });
     if (pet === undefined) {
       const error = new Error("Not a valid id");
       throw error;
