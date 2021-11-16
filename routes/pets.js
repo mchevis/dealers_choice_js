@@ -11,6 +11,7 @@ router.get("/", async (req, res, next) => {
         { model: Breed, as: "breed" },
         { model: Owner, as: "owner" },
       ],
+      order: ["name"],
     });
     res.send(require("../views/mainpage")(pets));
   } catch (err) {
@@ -28,15 +29,13 @@ router.get("/:id", async (req, res, next) => {
     }
     let pet;
     if (checkIfValidUUID(req.params.id)) {
-      pet = await Pet.findOne(
-        {
-          where: { id: req.params.id },
-          include: [
-            { model: Breed, as: "breed" },
-            { model: Owner, as: "owner" },
-          ],
-        } || null
-      );
+      pet = await Pet.findOne({
+        where: { id: req.params.id },
+        include: [
+          { model: Breed, as: "breed" },
+          { model: Owner, as: "owner" },
+        ],
+      });
     } else {
       pet = undefined;
     }
