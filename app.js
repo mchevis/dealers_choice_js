@@ -8,6 +8,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: false }));
+app.use(require("method-override")("_method"));
 
 app.use("/pets", require("./routes/pets"));
 

@@ -21,8 +21,12 @@ module.exports = (pet) =>
               <p> <span class="key"> DOB: </span> ${pet.dob} </p>
               <p> <span class="key"> Owner: </span> ${pet.owner.firstName} ${pet.owner.lastInitial} </p>
               <p> <span class="key"> Breed: </span> ${pet.breed.name} </p>
-</div>
-            </p>
+            </div>
+            <form method='POST' action='/pets/${pet.id}?_method=DELETE'>
+                  <button>
+                  x 
+                  </button>
+            </form>
           </div>
           <p id="back">&#128062 <a href="/">Back to Pets Directory</p>
         </div>
