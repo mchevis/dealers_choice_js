@@ -7,22 +7,31 @@ const app = express();
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.urlencoded({ extended: false }));
-app.use(require("method-override")("_method"));
 
-app.use("/pets", require("./routes/pets"));
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.redirect("/pets");
+app.use("/dist", express.static(path.join(__dirname, "dist")));
+
+app.get("/", (req, res, next) =>
+  res.sendFile(path.join(__dirname, "index.html"))
+);
+
+app.use("/api", require("./api"));
+
+app.use(function (err, req, res, next) {
+  console.log(err);
+  res
+    .status(err.status || 500)
+    .sendFile(path.join(__dirname, "./views/404page.html"));
 });
 
-app.use(function (req, res) {
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get("*", function (req, res) {
   res.status(404).sendFile(path.join(__dirname, "./views/404page.html"));
 });
 
 const setUp = async () => {
   try {
-    await conn.authenticate();
     await syncAndSeed();
     const port = process.env.PORT || 1337;
     app.listen(port, () => {

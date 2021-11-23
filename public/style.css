@@ -4,7 +4,34 @@ body {
   margin: 0px;
 }
 
-#homepage a {
+main {
+  display: flex;
+}
+
+section {
+  flex: 1;
+}
+
+#pets {
+  flex: 1.25 1 0;
+}
+
+h1 {
+  position: relative;
+  color: #ffffff;
+  font-size: 4rem;
+  line-height: 0.9;
+  text-align: center;
+}
+
+h2 {
+  position: relative;
+  font-size: 2rem;
+  line-height: 0.9;
+  text-align: center;
+}
+
+#pets-list a {
   color: #000000;
   text-decoration: none;
 }
@@ -42,25 +69,7 @@ img {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.pet-page .hero {
-  height: 100px;
-  justify-content: flex-start;
-}
-
-h1 {
-  position: relative;
-  color: #ffffff;
-  font-size: 4rem;
-  line-height: 0.9;
-  text-align: center;
-}
-
-.pet-page h1 {
-  font-size: 3rem;
-  padding: 2rem;
-}
-
-.pets-list {
+#pets-list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -69,10 +78,11 @@ h1 {
 
 .pet-item {
   display: flex;
-  padding: 3rem;
+  padding: 1rem;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1 0 25%;
 }
 
 .pet-item img {
@@ -88,11 +98,21 @@ h1 {
   box-shadow: 10px 5px 5px gray;
 }
 
-.pet-item p {
+.pet-item a {
+  font-size: 20px;
+  padding: 5px;
+}
+
+.selected img {
+  border: solid black;
+  box-shadow: 10px 5px 5px gray;
+}
+
+.selected {
   font-weight: bold;
 }
 
-.pet-details {
+#pet-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,16 +120,15 @@ h1 {
   justify-content: space-around;
 }
 
-.pet-details img {
+#pet-profile img {
   object-fit: cover;
   width: auto;
   height: 20rem;
   border: solid white;
   border-width: 4px;
-  box-shadow: 10px 5px 5px lightgray;
 }
 
-.pet-details .pet-info {
+#pet-profile .pet-info {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,10 +143,6 @@ h1 {
   font-weight: bold;
 }
 
-.pet-page #back {
-  text-align: center;
-}
-
 #errorPage {
   display: flex;
   flex-direction: column;
@@ -138,60 +153,5 @@ h1 {
 #errorPage h1 {
   color: black;
   font-size: 2rem;
-}
-
-#addPet {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 1rem;
-  padding: 2rem 3rem 2rem 2rem;
-  background-color: gray;
-  border-radius: 20px;
-}
-
-#addPet #formFields {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#addPet .addPetField {
-  padding: 10px;
-  width: -webkit-fill-available;
-  margin: 5px;
-}
-
-#addPet p {
-  text-align: center;
-  margin: 0 1rem 1rem 1rem;
-  color: white;
-  font-weight: bold;
-  font-size: 2rem;
-}
-
-#addPet button {
-  margin: 1rem;
-  padding: 1rem;
-  width: 200px;
-  border-radius: 2em;
-  color: #ffffff;
-  background-color: #4eb5f1;
-  text-align: center;
-  transition: all 0.2s;
-}
-
-#addPet button:hover {
-  color: white;
-  background-color: #4095c6;
-}
-
-@media (max-width: 650px) {
-  h1 {
-    font-size: 3rem;
-  }
-  .pet-page h1 {
-    font-size: 2rem;
-  }
+  margin: 10rem;
 }

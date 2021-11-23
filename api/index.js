@@ -4,45 +4,23 @@ const {
   models: { Owner, Breed, Pet },
 } = require("../db");
 
-router.get("/", async (req, res, next) => {
+router.get("/pets", async (req, res, next) => {
   try {
-    const [pets, owners, breeds] = await Promise.all([
-      Pet.findAll({
+    res.send(
+      await Pet.findAll({
         include: [
           { model: Breed, as: "breed" },
           { model: Owner, as: "owner" },
         ],
         order: ["name"],
-      }),
-      Owner.findAll({
-        order: ["firstName"],
-      }),
-      Breed.findAll({
-        order: ["type", "name"],
-      }),
-    ]);
-    res.send(require("../views/mainpage")(pets, owners, breeds));
+      })
+    );
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/", async (req, res, next) => {
-  try {
-    Pet.create({
-      name: req.body.petName,
-      dob: req.body.dob,
-      ownerId: req.body.ownerId,
-      breedId: req.body.breedId,
-      picture: req.body.petPic,
-    });
-    res.redirect(`/`);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/:id", async (req, res, next) => {
+router.get("/pets/:id", async (req, res, next) => {
   try {
     function checkIfValidUUID(str) {
       // Regular expression to check if string is a valid UUID
@@ -63,20 +41,22 @@ router.get("/:id", async (req, res, next) => {
       pet = undefined;
     }
     if (pet) {
-      res.send(require("../views/detailspage")(pet));
+      res.send(pet);
     } else {
-      res.redirect("/error");
+      const error = Error("Pet not found");
+      error.status = 400;
+      throw error;
     }
   } catch (error) {
     next(error);
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/pets/:id", async (req, res, next) => {
   try {
     const pet = await Pet.findByPk(req.params.id);
     await pet.destroy();
-    res.redirect(`/`);
+    res.sendStatus(204);
   } catch (ex) {
     next(ex);
   }
