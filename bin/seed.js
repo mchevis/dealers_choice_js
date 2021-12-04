@@ -1,61 +1,8 @@
-const Sequelize = require("sequelize");
-const { STRING, UUID, UUIDV4, DATEONLY, ENUM } = Sequelize;
-const conn = new Sequelize(
-  process.env.DATABASE_URL || "postgres://localhost/dealers_choice_pets"
-);
+const { db, Owner, Breed, Pet } = require("../server/db/");
 
-const Owner = conn.define("tblOwner", {
-  id: {
-    type: UUID,
-    primaryKey: true,
-    defaultValue: UUIDV4,
-  },
-  firstName: {
-    type: STRING(20),
-    allowNull: false,
-  },
-  lastInitial: {
-    type: STRING(1),
-    allowNull: false,
-  },
-});
-
-const Breed = conn.define("tblBreed", {
-  name: {
-    type: STRING(20),
-    allowNull: false,
-  },
-  type: {
-    type: ENUM("dog", "cat", "hedgehog"),
-  },
-});
-
-const Pet = conn.define("tblPet", {
-  id: {
-    type: UUID,
-    primaryKey: true,
-    defaultValue: UUIDV4,
-  },
-  name: {
-    type: STRING(20),
-    allowNull: false,
-  },
-  dob: {
-    type: DATEONLY,
-  },
-  picture: {
-    type: STRING(),
-    //normally i'd have validated it but my current seeding method doesn't allow it and I dont wanna upload all these pics to imgur
-    // validate: { isUrl: true },
-  },
-});
-
-Pet.belongsTo(Breed, { as: "breed" });
-Pet.belongsTo(Owner, { as: "owner" });
-
-const syncAndSeed = async () => {
+const seed = async () => {
   try {
-    await conn.sync({ force: true });
+    await db.sync({ force: true });
     console.log(`Tables have been dropped;`);
     //create owners, types, and breeds (name only)
     const [
@@ -123,7 +70,7 @@ const syncAndSeed = async () => {
       Pet.create({
         name: "Praya",
         dob: new Date(2008, 1, 5),
-        breedId: chinese.id,
+        breedId: pyranese.id,
         ownerId: simone.id,
         picture: "/praya.jpg",
       }),
@@ -149,9 +96,24 @@ const syncAndSeed = async () => {
         picture: "/poseidon.jpg",
       }),
     ]);
+    db.close();
+    console.log(`
+    
+        Seeding successful!
+        
+    `);
   } catch (err) {
-    console.log(err);
+    db.close();
+    console.log(`
+
+    Error seeding:
+
+    ${err.message}
+
+    ${err.stack}
+
+  `);
   }
 };
 
-module.exports = { conn, syncAndSeed, models: { Owner, Breed, Pet } };
+seed();

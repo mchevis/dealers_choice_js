@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const petList = document.querySelector("#pets-list");
 const petProfile = document.querySelector("#pet-profile");
 

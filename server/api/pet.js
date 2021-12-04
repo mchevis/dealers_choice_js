@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {
-  models: { Owner, Breed, Pet },
-} = require("../db");
+const { Owner, Breed, Pet } = require("../db");
 
-router.get("/pets", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     res.send(
       await Pet.findAll({
@@ -20,16 +18,10 @@ router.get("/pets", async (req, res, next) => {
   }
 });
 
-router.get("/pets/:id", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    function checkIfValidUUID(str) {
-      // Regular expression to check if string is a valid UUID
-      const regexExp =
-        /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
-      return regexExp.test(str);
-    }
     let pet;
-    if (checkIfValidUUID(req.params.id)) {
+    if (req.params.id) {
       pet = await Pet.findOne({
         where: { id: req.params.id },
         include: [
@@ -52,7 +44,7 @@ router.get("/pets/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/pets/:id", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const pet = await Pet.findByPk(req.params.id);
     await pet.destroy();
