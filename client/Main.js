@@ -1,93 +1,69 @@
 import React from "react";
 import axios from "axios";
+import Nav from "./Nav";
+import PetsList from "./PetsList";
+import SinglePet from "./SinglePet";
 
-const petList = document.querySelector("#pets-list");
-const petProfile = document.querySelector("#pet-profile");
-
-let pets, profile;
-
-const renderPets = async () => {
-  try {
-    pets = (await axios.get("/api/pets")).data;
-    const petId = window.location.hash.slice(1);
-    const html = pets
-      .map(
-        (pet) =>
-          `
-                  <li class='pet-item ${pet.id === petId ? "selected" : ""}'>
-                      <a href='#${pet.id}'> <img src="${pet.picture}" /> </a>
-                      <a href='#${pet.id}'> ${pet.name} </a> 
-                      <button pet-id='${pet.id}'> x </button>
-                  </li>
-              `
-      )
-      .join("");
-    petList.innerHTML = html;
-  } catch (err) {
-    console.log(err);
+export default class Main extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      pets: [],
+      selectedPet: {},
+    };
+    this.selectPet = this.selectPet.bind(this);
+    this.clearPet = this.clearPet.bind(this);
+    this.deletePet = this.deletePet.bind(this);
   }
-};
 
-petList.addEventListener("click", async (ev) => {
-  try {
-    const target = ev.target;
-    if (target.tagName === "BUTTON") {
-      const response = await axios.delete(
-        `/api/pets/${target.getAttribute("pet-id")}`
-      );
-      await renderPets();
-      fetchPetProfile();
+  async selectPet(petId) {
+    try {
+      if (!petId) {
+        this.setState({ selectedPet: {} });
+      } else {
+        const selectedPet = (await axios.get(`/api/pets/${petId}`)).data;
+        this.setState({ selectedPet });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-});
 
-const renderPetProfile = async () => {
-  try {
-    const html = `
-        <img src="${profile.picture}" />
-        <h2>${profile.name}</h2>
-        <div class="pet-info">
-            <p> <span class="key"> DOB: </span> ${profile.dob} </p>
-            <p> <span class="key"> Owner: </span> ${profile.owner.firstName} ${profile.owner.lastInitial} </p>
-            <p> <span class="key"> Breed: </span> ${profile.breed.name} </p>
-        </div>
-        `;
-    petProfile.innerHTML = html;
-  } catch (err) {
-    console.log(err);
+  clearPet() {
+    this.setState({ selectedPet: {} });
   }
-};
 
-const fetchPetProfile = async () => {
-  try {
-    const petId = window.location.hash.slice(1);
-    console.log(pets);
-    if (pets.find((pet) => pet.id === petId)) {
-      const url = `/api/pets/${petId}`;
-      profile = (await axios(url)).data;
-      renderPetProfile();
-    } else {
-      petProfile.innerHTML = "";
+  async deletePet(petId) {
+    try {
+      await axios.delete(`/api/pets/${petId}`);
+      const pets = this.state.pets.filter((pet) => pet.id !== petId);
+      this.setState({ pets });
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-};
 
-const init = async () => {
-  try {
-    renderPets();
-    fetchPetProfile();
-  } catch (err) {
-    console.log(err);
+  async componentDidMount() {
+    this.setState({
+      pets: (await axios.get("/api/pets")).data,
+    });
   }
-};
 
-window.addEventListener("hashchange", async () => {
-  renderPets();
-  fetchPetProfile();
-});
-
-init();
+  render() {
+    const { pets, selectedPet } = this.state;
+    return (
+      <div id="main">
+        <Nav clearPet={this.clearPet} />
+        {selectedPet.id ? (
+          <SinglePet selectedPet={selectedPet} />
+        ) : (
+          <PetsList
+            pets={pets}
+            selectPet={this.selectPet}
+            deletePet={this.deletePet}
+          />
+        )}
+      </div>
+    );
+  }
+}

@@ -2154,94 +2154,234 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Main)
+/* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nav */ "./client/Nav.js");
+/* harmony import */ var _PetsList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PetsList */ "./client/PetsList.js");
+/* harmony import */ var _SinglePet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SinglePet */ "./client/SinglePet.js");
 
 
-const petList = document.querySelector("#pets-list");
-const petProfile = document.querySelector("#pet-profile");
-let pets, profile;
 
-const renderPets = async () => {
-  try {
-    pets = (await axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/pets")).data;
-    const petId = window.location.hash.slice(1);
-    const html = pets.map(pet => `
-                  <li class='pet-item ${pet.id === petId ? "selected" : ""}'>
-                      <a href='#${pet.id}'> <img src="${pet.picture}" /> </a>
-                      <a href='#${pet.id}'> ${pet.name} </a> 
-                      <button pet-id='${pet.id}'> x </button>
-                  </li>
-              `).join("");
-    petList.innerHTML = html;
-  } catch (err) {
-    console.log(err);
+
+
+class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
+  constructor() {
+    super();
+    this.state = {
+      pets: [],
+      selectedPet: {}
+    };
+    this.selectPet = this.selectPet.bind(this);
+    this.clearPet = this.clearPet.bind(this);
+    this.deletePet = this.deletePet.bind(this);
   }
-};
 
-petList.addEventListener("click", async ev => {
-  try {
-    const target = ev.target;
-
-    if (target.tagName === "BUTTON") {
-      const response = await axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"](`/api/pets/${target.getAttribute("pet-id")}`);
-      await renderPets();
-      fetchPetProfile();
+  async selectPet(petId) {
+    try {
+      if (!petId) {
+        this.setState({
+          selectedPet: {}
+        });
+      } else {
+        const selectedPet = (await axios__WEBPACK_IMPORTED_MODULE_1___default().get(`/api/pets/${petId}`)).data;
+        this.setState({
+          selectedPet
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-});
 
-const renderPetProfile = async () => {
-  try {
-    const html = `
-        <img src="${profile.picture}" />
-        <h2>${profile.name}</h2>
-        <div class="pet-info">
-            <p> <span class="key"> DOB: </span> ${profile.dob} </p>
-            <p> <span class="key"> Owner: </span> ${profile.owner.firstName} ${profile.owner.lastInitial} </p>
-            <p> <span class="key"> Breed: </span> ${profile.breed.name} </p>
-        </div>
-        `;
-    petProfile.innerHTML = html;
-  } catch (err) {
-    console.log(err);
+  clearPet() {
+    this.setState({
+      selectedPet: {}
+    });
   }
-};
 
-const fetchPetProfile = async () => {
-  try {
-    const petId = window.location.hash.slice(1);
-    console.log(pets);
-
-    if (pets.find(pet => pet.id === petId)) {
-      const url = `/api/pets/${petId}`;
-      profile = (await axios__WEBPACK_IMPORTED_MODULE_1___default()(url)).data;
-      renderPetProfile();
-    } else {
-      petProfile.innerHTML = "";
+  async deletePet(petId) {
+    try {
+      await axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"](`/api/pets/${petId}`);
+      const pets = this.state.pets.filter(pet => pet.id !== petId);
+      this.setState({
+        pets
+      });
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
+
+  async componentDidMount() {
+    this.setState({
+      pets: (await axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/pets")).data
+    });
+  }
+
+  render() {
+    const {
+      pets,
+      selectedPet
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      id: "main"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Nav__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      clearPet: this.clearPet
+    }), selectedPet.id ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_SinglePet__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      selectedPet: selectedPet
+    }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PetsList__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      pets: pets,
+      selectPet: this.selectPet,
+      deletePet: this.deletePet
+    }));
+  }
+
+}
+
+/***/ }),
+
+/***/ "./client/Nav.js":
+/*!***********************!*\
+  !*** ./client/Nav.js ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+const Hero = ({
+  clearPet
+}) => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    id: "hero"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
+    onClick: () => clearPet()
+  }, "Marina's Pets Directory "))));
 };
 
-const init = async () => {
-  try {
-    renderPets();
-    fetchPetProfile();
-  } catch (err) {
-    console.log(err);
-  }
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Hero);
+
+/***/ }),
+
+/***/ "./client/PetIcon.js":
+/*!***************************!*\
+  !*** ./client/PetIcon.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+const PetIcon = ({
+  pet,
+  selectPet,
+  deletePet
+}) => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "pet-item"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("a", {
+    onClick: () => selectPet(pet.id)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+    src: pet.picture
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, " ", pet.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    "pet-id": pet.id,
+    onClick: () => deletePet(pet.id)
+  }, " ", "x", " "));
 };
 
-window.addEventListener("hashchange", async () => {
-  renderPets();
-  fetchPetProfile();
-});
-init();
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PetIcon);
+
+/***/ }),
+
+/***/ "./client/PetsList.js":
+/*!****************************!*\
+  !*** ./client/PetsList.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _PetIcon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PetIcon */ "./client/PetIcon.js");
+
+
+
+const PetsList = ({
+  pets,
+  selectPet,
+  deletePet
+}) => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    id: "pets-list"
+  }, pets.map(pet => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PetIcon__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    pet: pet,
+    selectPet: selectPet,
+    deletePet: deletePet,
+    key: pet.id
+  })));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PetsList); // {
+//   /* <main>
+//
+//         <section id="profiles">
+//           <h2>Pet Profile</h2>
+//           <div id="pet-profile"></div>
+//         </section>
+//       </main> */
+// }
+
+/***/ }),
+
+/***/ "./client/SinglePet.js":
+/*!*****************************!*\
+  !*** ./client/SinglePet.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+const SinglePet = ({
+  selectedPet
+}) => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "pet-profile"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+    src: selectedPet.picture
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, selectedPet.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "pet-info"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+    className: "key"
+  }, " DOB: "), " ", selectedPet.dob), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+    className: "key"
+  }, " Owner: "), " ", selectedPet.owner.firstName, " ", selectedPet.owner.lastInitial), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+    className: "key"
+  }, " Breed: "), " ", selectedPet.breed.name)));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SinglePet);
 
 /***/ }),
 
