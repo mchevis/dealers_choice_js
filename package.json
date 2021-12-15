@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run start-server & npm run build-watch",
-    "start-server": "nodemon --watch server -e js,html server/main.js",
-    "build-watch": "webpack -w",
+    "build": "webpack",
+    "build-watch": "npm run build -- --watch --mode=development",
+    "start-server": "nodemon server/main.js --ignore client/ --ignore public/",
+    "start:dev": "npm run build-watch & npm run start-server",
     "seed": "node ./bin/seed"
   },
   "author": "",
@@ -17,13 +18,18 @@
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
     "pg": "^8.7.1",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.4.1",
     "request": "^2.88.2",
     "sequelize": "^6.9.0"
   },
   "devDependencies": {
-    "axios": "^0.24.0",
     "@babel/core": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
+    "axios": "^0.24.0",
     "babel-loader": "^8.2.3",
     "nodemon": "^2.0.14",
     "react": "^17.0.2",
