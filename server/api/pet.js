@@ -18,6 +18,23 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.post("/random", async (req, res, next) => {
+  try {
+    const pet = await Pet.createRandom();
+    res.send(
+      await Pet.findOne({
+        where: { id: pet.id },
+        include: [
+          { model: Breed, as: "breed" },
+          { model: Owner, as: "owner" },
+        ],
+      })
+    );
+  } catch (ex) {
+    next(ex);
+  }
+});
+
 router.get("/:id", async (req, res, next) => {
   try {
     let pet;

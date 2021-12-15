@@ -4,6 +4,7 @@ import { fetchPets } from "../store";
 import Hero from "./Nav";
 import PetsList from "./PetsList";
 import SinglePet from "./SinglePet";
+import AddPet from "./AddPet";
 
 class Main extends React.Component {
   componentDidMount() {
@@ -14,6 +15,7 @@ class Main extends React.Component {
     return (
       <div id="main">
         <Hero />
+        <AddPet />
         {this.props.selectedPet.id ? <SinglePet /> : <PetsList />}
       </div>
     );

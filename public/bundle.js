@@ -2146,6 +2146,42 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./client/components/AddPet.js":
+/*!*************************************!*\
+  !*** ./client/components/AddPet.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store */ "./client/store.js");
+
+
+
+
+const AddPet = props => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    id: "addNewPet"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    onClick: () => props.createPet()
+  }, "Add Random Pet"));
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    createPet: () => dispatch((0,_store__WEBPACK_IMPORTED_MODULE_2__.createPet)())
+  };
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(null, mapDispatchToProps)(AddPet));
+
+/***/ }),
+
 /***/ "./client/components/Main.js":
 /*!***********************************!*\
   !*** ./client/components/Main.js ***!
@@ -2163,6 +2199,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Nav */ "./client/components/Nav.js");
 /* harmony import */ var _PetsList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PetsList */ "./client/components/PetsList.js");
 /* harmony import */ var _SinglePet__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SinglePet */ "./client/components/SinglePet.js");
+/* harmony import */ var _AddPet__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AddPet */ "./client/components/AddPet.js");
+
 
 
 
@@ -2178,7 +2216,7 @@ class Main extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
       id: "main"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Nav__WEBPACK_IMPORTED_MODULE_3__["default"], null), this.props.selectedPet.id ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_SinglePet__WEBPACK_IMPORTED_MODULE_5__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PetsList__WEBPACK_IMPORTED_MODULE_4__["default"], null));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Nav__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_AddPet__WEBPACK_IMPORTED_MODULE_6__["default"], null), this.props.selectedPet.id ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_SinglePet__WEBPACK_IMPORTED_MODULE_5__["default"], null) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PetsList__WEBPACK_IMPORTED_MODULE_4__["default"], null));
   }
 
 }
@@ -2391,6 +2429,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "clearSelectedPet": () => (/* binding */ clearSelectedPet),
 /* harmony export */   "fetchPets": () => (/* binding */ fetchPets),
 /* harmony export */   "deletePet": () => (/* binding */ deletePet),
+/* harmony export */   "createPet": () => (/* binding */ createPet),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
@@ -2408,12 +2447,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const FETCH_PETS_FROM_SERVER = "FETCH_PETS_FROM_SERVER";
 const SELECT_PET = "SELECT_PET";
-const CLEAR_SELECTED_PET = "CLEAR_SELECTED_PET"; //ACTION CREATORS
-
-const fetchedPets = pets => ({
-  type: FETCH_PETS_FROM_SERVER,
-  pets
-});
+const CLEAR_SELECTED_PET = "CLEAR_SELECTED_PET";
+const CREATE_PET = "CREATE_PET"; //ACTION CREATORS
 
 const selectPet = pet => ({
   type: SELECT_PET,
@@ -2428,13 +2463,27 @@ const fetchPets = () => {
     const {
       data
     } = await axios__WEBPACK_IMPORTED_MODULE_2___default().get("/api/pets");
-    dispatch(fetchedPets(data));
+    dispatch({
+      type: FETCH_PETS_FROM_SERVER,
+      pets: data
+    });
   };
 };
 const deletePet = pet => {
   return async dispatch => {
     await axios__WEBPACK_IMPORTED_MODULE_2___default()["delete"](`/api/pets/${pet.id}`);
     dispatch(fetchPets());
+  };
+};
+const createPet = () => {
+  return async dispatch => {
+    const {
+      data
+    } = await axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/pets/random");
+    dispatch({
+      type: CREATE_PET,
+      pet: data
+    });
   };
 }; //INITIAL STATE
 
@@ -2458,6 +2507,11 @@ const reducer = (state = initialState, action) => {
     case CLEAR_SELECTED_PET:
       return { ...state,
         selectedPet: {}
+      };
+
+    case CREATE_PET:
+      return { ...state,
+        pets: [...state.pets, action.pet]
       };
 
     default:

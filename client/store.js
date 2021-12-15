@@ -8,12 +8,9 @@ import axios from "axios";
 const FETCH_PETS_FROM_SERVER = "FETCH_PETS_FROM_SERVER";
 const SELECT_PET = "SELECT_PET";
 const CLEAR_SELECTED_PET = "CLEAR_SELECTED_PET";
+const CREATE_PET = "CREATE_PET";
 
 //ACTION CREATORS
-const fetchedPets = (pets) => ({
-  type: FETCH_PETS_FROM_SERVER,
-  pets,
-});
 
 export const selectPet = (pet) => ({
   type: SELECT_PET,
@@ -28,7 +25,7 @@ export const clearSelectedPet = () => ({
 export const fetchPets = () => {
   return async (dispatch) => {
     const { data } = await axios.get("/api/pets");
-    dispatch(fetchedPets(data));
+    dispatch({ type: FETCH_PETS_FROM_SERVER, pets: data });
   };
 };
 
@@ -36,6 +33,13 @@ export const deletePet = (pet) => {
   return async (dispatch) => {
     await axios.delete(`/api/pets/${pet.id}`);
     dispatch(fetchPets());
+  };
+};
+
+export const createPet = () => {
+  return async (dispatch) => {
+    const { data } = await axios.post("/api/pets/random");
+    dispatch({ type: CREATE_PET, pet: data });
   };
 };
 
@@ -54,6 +58,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, selectedPet: action.pet };
     case CLEAR_SELECTED_PET:
       return { ...state, selectedPet: {} };
+    case CREATE_PET:
+      return { ...state, pets: [...state.pets, action.pet] };
     default:
       return state;
   }
