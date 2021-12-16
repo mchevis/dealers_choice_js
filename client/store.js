@@ -68,7 +68,7 @@ const reducer = (state = initialState, action) => {
 //STORE
 const store = createStore(
   reducer,
-  composeWithDevTools(applyMiddleware(loggerMiddleware, thunk))
+  composeWithDevTools(applyMiddleware(thunk, loggerMiddleware))
 );
 
 export default store;

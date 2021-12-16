@@ -2520,7 +2520,7 @@ const reducer = (state = initialState, action) => {
 }; //STORE
 
 
-const store = (0,redux__WEBPACK_IMPORTED_MODULE_3__.createStore)(reducer, (0,redux_devtools_extension__WEBPACK_IMPORTED_MODULE_0__.composeWithDevTools)((0,redux__WEBPACK_IMPORTED_MODULE_3__.applyMiddleware)((redux_logger__WEBPACK_IMPORTED_MODULE_1___default()), redux_thunk__WEBPACK_IMPORTED_MODULE_4__["default"])));
+const store = (0,redux__WEBPACK_IMPORTED_MODULE_3__.createStore)(reducer, (0,redux_devtools_extension__WEBPACK_IMPORTED_MODULE_0__.composeWithDevTools)((0,redux__WEBPACK_IMPORTED_MODULE_3__.applyMiddleware)(redux_thunk__WEBPACK_IMPORTED_MODULE_4__["default"], (redux_logger__WEBPACK_IMPORTED_MODULE_1___default()))));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);
 
 /***/ }),
